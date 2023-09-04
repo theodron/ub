@@ -9,17 +9,12 @@ from pyrogram.types import Message
 
 from config import HNDLR, bot as USER
 
-
-
-def convert(text):
+def convert(text, lang, gender="male"):
     audio = BytesIO()
-    i = Translator().translate(text, dest="en")
-    lang = i.src
-    tts = gTTS(text, lang=lang)
+    tts = gTTS(text, lang=lang, tld=gender)  # 'tld' specifies the desired gender
     audio.name = lang + ".mp3"
     tts.write_to_fp(audio)
     return audio
-
 
 @Client.on_message(filters.command(["tts"], prefixes=f"{HNDLR}"))
 async def text_to_speech(_, message: Message):
@@ -31,7 +26,9 @@ async def text_to_speech(_, message: Message):
     text = message.reply_to_message.text
     try:
         loop = get_running_loop()
-        audio = await loop.run_in_executor(None, convert, text)
+        i = Translator().translate(text, dest="en")
+        lang = i.src
+        audio = await loop.run_in_executor(None, convert, text, lang, gender="male")  # Specify the desired gender here
         await message.reply_audio(audio)
         await m.delete()
         audio.close()
