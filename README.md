@@ -44,15 +44,15 @@ pip3 install -r requirements.txt
 ```
 
 ```
-nano .env
+vi .env
 ```
- Edit your Vars here , Save type```ctrl S + Ctrl X```
+ To Edit your Vars Press i here , For Saving type```ctrl + C and then :wq```
 ```
-screen -S MusicUserbot
+tmux
 ```
-
+To run type 
 ```
-To run type python3 main.py
+python3 main.py
 ```
 
 ## 🛠 Commands:
