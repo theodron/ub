@@ -1,0 +1,15 @@
+TgCrypto
+pyrogram==2.0.106
+py-tgcalls==0.9.2
+requests
+aiohttp
+aiofiles
+pillow
+asyncio
+wget
+python-arq
+youtube-search-python==1.4.6
+yt-dlp
+python-dotenv
+gTTS
+googletrans==4.0.0rc1
