@@ -10,19 +10,24 @@ from pyrogram.types import Message
 
 from config import HNDLR, bot as USER
 
-def convert(text, lang, gender="male"):
+def convert(text, lang):
     audio = BytesIO()
-    # Note: gTTS doesn't directly support gender parameter
-    # Using different TLDs can sometimes affect voice characteristics
-    tld = "com"  # Default (can try "co.uk" for different voice)
-    if gender.lower() == "female":
-        tld = "com.au"  # Example TLD that might sound more feminine
+    try:
+        # For Indian female voice, we use:
+        # lang='en' - English
+        # tld='co.in' - Indian domain
+        # This combination sometimes produces Indian-accented English
         
-    tts = gTTS(text, lang=lang, tld=tld)
-    audio.name = f"tts_{lang}.mp3"
-    tts.write_to_fp(audio)
-    audio.seek(0)  # Rewind the buffer
-    return audio
+        # For Hindi text, use lang='hi'
+        actual_lang = 'hi' if lang == 'hi' else 'en'
+        tts = gTTS(text, lang=actual_lang, tld='co.in')
+        
+        audio.name = f"tts_{actual_lang}.mp3"
+        tts.write_to_fp(audio)
+        audio.seek(0)
+        return audio
+    except Exception as e:
+        raise Exception(f"TTS Error: {str(e)}")
 
 @Client.on_message(filters.command(["tts"], prefixes=f"{HNDLR}"))
 async def text_to_speech(_, message: Message):
@@ -31,23 +36,23 @@ async def text_to_speech(_, message: Message):
     if not message.reply_to_message.text:
         return await message.reply_text("💡 Please reply to a text message!")
         
-    m = await message.reply_text("🔁 Processing...")
+    m = await message.reply_text("🔁 Processing Indian female voice...")
     text = message.reply_to_message.text
     
     try:
         loop = get_running_loop()
         translator = Translator()
-        # Detect language (fallback to English if detection fails)
+        
+        # Detect language but force Indian English ('en') or Hindi ('hi')
         try:
             detected = translator.detect(text)
-            lang = detected.lang if detected.confidence > 0.5 else "en"
+            lang = detected.lang if detected.confidence > 0.5 else 'en'
+            # Use Hindi if detected, otherwise use English with Indian accent
+            lang = 'hi' if lang == 'hi' else 'en'
         except:
-            lang = "en"
+            lang = 'en'  # Default to Indian English
         
-        # Create partial function with all arguments
-        convert_func = partial(convert, text=text, lang=lang, gender="male")
-        
-        # Run in executor without passing kwargs directly
+        convert_func = partial(convert, text=text, lang=lang)
         audio = await loop.run_in_executor(None, convert_func)
         
         await message.reply_audio(audio)
