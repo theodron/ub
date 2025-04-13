@@ -9,14 +9,17 @@ from pyrogram.types import Message
 
 from config import HNDLR, bot as USER
 
-def convert(text, lang, gender="male"):
+
+
+def convert(text):
     audio = BytesIO()
-    # Note: gTTS doesn't actually support gender parameter through tld
-    # You'll need to use specific tlds for male/female voices
+    i = Translator().translate(text, dest="en")
+    lang = i.src
     tts = gTTS(text, lang=lang)
     audio.name = lang + ".mp3"
     tts.write_to_fp(audio)
     return audio
+
 
 @Client.on_message(filters.command(["tts"], prefixes=f"{HNDLR}"))
 async def text_to_speech(_, message: Message):
@@ -28,15 +31,7 @@ async def text_to_speech(_, message: Message):
     text = message.reply_to_message.text
     try:
         loop = get_running_loop()
-        i = Translator().translate(text, dest="en")
-        lang = i.src
-        
-        # Create a partial function or lambda to pass additional arguments
-        audio = await loop.run_in_executor(
-            None, 
-            lambda: convert(text, lang, "male")  # Gender is now passed correctly
-        )
-        
+        audio = await loop.run_in_executor(None, convert, text)
         await message.reply_audio(audio)
         await m.delete()
         audio.close()
