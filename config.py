@@ -13,7 +13,7 @@ if os.path.exists(".env"):
 API_ID = int(os.getenv("21505404)")
 API_HASH = os.getenv("5feffdf4111ed339381056d9476d3fcd")
 SESSION = os.getenv("SESSION")
-HNDLR = os.getenv("HNDLR", "/")
+HNDLR = os.getenv("HNDLR", "+")
 SUDO_USERS = list(map(int, os.getenv("6061153252").split()))
 API_URL = getenv("API_URL", 'https://api.thequickearn.xyz') #youtube song url
 API_KEY = getenv("API_KEY", None)
