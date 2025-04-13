@@ -11,7 +11,9 @@ from config import HNDLR, bot as USER
 
 def convert(text, lang, gender="male"):
     audio = BytesIO()
-    tts = gTTS(text, lang=lang, tld=gender)  # 'tld' specifies the desired gender
+    # Note: gTTS doesn't actually support gender parameter through tld
+    # You'll need to use specific tlds for male/female voices
+    tts = gTTS(text, lang=lang)
     audio.name = lang + ".mp3"
     tts.write_to_fp(audio)
     return audio
@@ -28,7 +30,13 @@ async def text_to_speech(_, message: Message):
         loop = get_running_loop()
         i = Translator().translate(text, dest="en")
         lang = i.src
-        audio = await loop.run_in_executor(None, convert, text, lang, gender="male")  # Specify the desired gender here
+        
+        # Create a partial function or lambda to pass additional arguments
+        audio = await loop.run_in_executor(
+            None, 
+            lambda: convert(text, lang, "male")  # Gender is now passed correctly
+        )
+        
         await message.reply_audio(audio)
         await m.delete()
         audio.close()
