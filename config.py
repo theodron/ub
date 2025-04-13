@@ -10,11 +10,11 @@ if os.path.exists(".env"):
     load_dotenv(".env")
 
 # Necessary Vars
-API_ID = int(os.getenv("21505404"))
-API_HASH = os.getenv("5feffdf4111ed339381056d9476d3fcd")
+API_ID = int(os.getenv("API_ID"))
+API_HASH = os.getenv("API_HASH")
 SESSION = os.getenv("SESSION")
 HNDLR = os.getenv("HNDLR", "+")
-SUDO_USERS = list(map(int, os.getenv("6061153252").split()))
+SUDO_USERS = list(map(int, os.getenv("SUDO_USERS").split()))
 API_URL = getenv("API_URL", 'https://api.thequickearn.xyz') #youtube song url
 API_KEY = getenv("API_KEY", None)
 
