@@ -14,6 +14,9 @@ API_HASH = os.getenv("API_HASH")
 SESSION = os.getenv("SESSION")
 HNDLR = os.getenv("HNDLR", "+")
 SUDO_USERS = list(map(int, os.getenv("SUDO_USERS").split()))
+API_URL = getenv("API_URL", 'https://api.thequickearn.xyz') #youtube song url
+API_KEY = getenv("API_KEY", None)
+
 
 
 contact_filter = filters.create(
