@@ -43,7 +43,7 @@ async def song(client, message: Message):
         "prefer_ffmpeg": True,
         "geo_bypass": True,
         "nocheckcertificate": True,
-        "cookiefile": "./cookies/cookies.txt"",
+        "cookiefile": "./cookies/cookies.txt",
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -118,7 +118,7 @@ async def vsong(client, message: Message):
         "prefer_ffmpeg": True,
         "geo_bypass": True,
         "nocheckcertificate": True,
-        "cookiefile": "./cookies/cookies.txt"",
+        "cookiefile": "./cookies/cookies.txt",
         "postprocessors": [{"key": "FFmpegVideoConvertor", "preferedformat": "mp4"}],
         "outtmpl": "%(id)s.mp4",
         "logtostderr": False,
